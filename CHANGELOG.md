@@ -1,3 +1,9 @@
+## v0.2.2 (2022-01-29)
+
+### Fix
+
+- **main.py**: add UserAgent information to fake a browser visit (#5)
+
 ## v0.2.1 (2022-01-29)
 
 ### Fix
