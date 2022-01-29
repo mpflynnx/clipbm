@@ -43,8 +43,10 @@ def main() -> None:
     html = response.read()
     soup = BeautifulSoup(html, "lxml")
     text = soup.get_text(strip=True)
-    title = soup.title.text
+    dtitle = soup.title.text
 
+    # limit length of title
+    title = dtitle[0:83]
 
     # encode url title
     encoded = title.encode("ascii", "ignore")
