@@ -1,11 +1,11 @@
-from bs4 import BeautifulSoup
-
 import sys
-import urllib.request
+from urllib.request import Request, urlopen
 
+from bs4 import BeautifulSoup
 
 # pass first argument as your url
 url = sys.argv[1]
+
 
 def remove_punctuation(s):
     """Strip all punctuation, except "_", "/" , "-"from s."""
@@ -34,15 +34,17 @@ def build_file(url, urlfile):
     myfile.write('''URL="{0}"'''.format(url))
     myfile.close()
 
+
 def main() -> None:
 
-    # Encode urlfile, to ignore non ascii characters.
-
     # Use beautiful soup to find url title
-    response = urllib.request.urlopen(url)
-    html = response.read()
+
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.3"
+    }
+    req = Request(url=url, headers=headers)
+    html = urlopen(req).read()
     soup = BeautifulSoup(html, "lxml")
-    text = soup.get_text(strip=True)
     dtitle = soup.title.text
 
     # limit length of title
@@ -72,6 +74,7 @@ def main() -> None:
 
     # Build the output file.
     build_file(url, urlfile2)
+
 
 # --------------------------------------------------
 if __name__ == "__main__":
