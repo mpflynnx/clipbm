@@ -1,3 +1,9 @@
+## v0.3.0 (2022-02-01)
+
+### Feat
+
+- **main.py**: get input from clipboard using xsel
+
 ## v0.2.2 (2022-01-29)
 
 ### Fix
