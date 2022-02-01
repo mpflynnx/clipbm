@@ -1,10 +1,15 @@
-import sys
+import subprocess
 from urllib.request import Request, urlopen
 
+import validus
 from bs4 import BeautifulSoup
+from colorama import Fore
 
-# pass first argument as your url
-url = sys.argv[1]
+
+def paste_xsel():
+    p = subprocess.Popen(["xsel", "-b", "-o"], stdout=subprocess.PIPE, close_fds=True)
+    stdout, stderr = p.communicate()
+    return stdout.decode("utf-8")
 
 
 def remove_punctuation(s):
@@ -35,45 +40,61 @@ def build_file(url, urlfile):
     myfile.close()
 
 
-def main() -> None:
-
-    # Use beautiful soup to find url title
+def get_title(reg_url):
+    """Use beautiful soup to find url title."""
 
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.3"
     }
-    req = Request(url=url, headers=headers)
+    req = Request(url=reg_url, headers=headers)
     html = urlopen(req).read()
     soup = BeautifulSoup(html, "lxml")
-    dtitle = soup.title.text
+    return soup.title.text
 
-    # limit length of title
-    title = dtitle[0:83]
 
-    # encode url title
-    encoded = title.encode("ascii", "ignore")
-    #  encoded = urlfile.encode("ascii", "replace")
+def main() -> None:
 
-    # Decode now to utf-8.
-    urlfileutf8 = encoded.decode("utf-8")
+    try:
+        print(Fore.LIGHTCYAN_EX + "\n    Reading url from clipboard...", flush=True)
+        # Get url from clipboard
+        reg_url = paste_xsel()
 
-    # Strip any punctuation, excluding "_"
-    clean = remove_punctuation(urlfileutf8)
+        # Validate reg_url
+        if not validus.isurl(reg_url):
+            print(Fore.LIGHTRED_EX + "    ⚠️   ERROR: No url available in clipboard. 😢")
+            return
 
-    # Replace spaces with underscore.
-    spaces = myreplace(" ", "_", clean)
+        print(Fore.LIGHTCYAN_EX + "\n    Getting title for url...", flush=True)
+        dtitle = get_title(reg_url)
 
-    # Constuct output location and filename.
-    # convert urlfile to utf-8
+        # limit length of title
+        title = dtitle[0:83]
 
-    urlfile2 = "/home/live/Dropbox/bookmarks/" + spaces + ".url"
+        # encode url title
+        encoded = title.encode("ascii", "ignore")
+        #  encoded = urlfile.encode("ascii", "replace")
 
-    # Text to display.
-    print("\n    New file created at....\n")
-    print("    " + urlfile2 + "\n")
+        # Decode now to utf-8.
+        urlfileutf8 = encoded.decode("utf-8")
 
-    # Build the output file.
-    build_file(url, urlfile2)
+        # Strip any punctuation, excluding "_"
+        clean = remove_punctuation(urlfileutf8)
+
+        # Replace spaces with underscore.
+        spaces = myreplace(" ", "_", clean)
+
+        # Constuct output location and filename.
+        urlfile2 = "/home/live/Dropbox/bookmarks/" + spaces + ".url"
+
+        # Build the output file.
+        build_file(reg_url, urlfile2)
+
+        # Text to display.
+        print(Fore.LIGHTYELLOW_EX + "\n    New file created at....\n")
+        print(Fore.LIGHTGREEN_EX + "    " + urlfile2 + "\n")
+
+    except Exception as x:
+        print(Fore.LIGHTRED_EX + f"⚠️⚠️⚠️⚠️   Error: Unexpected crash: {x}.")
 
 
 # --------------------------------------------------
