@@ -1,3 +1,9 @@
+## v0.3.2 (2022-02-02)
+
+### Fix
+
+- **main.py**: remove any white spaces from the end of the pasted clipboard content (#14)
+
 ## v0.3.1 (2022-02-02)
 
 ### Fix
