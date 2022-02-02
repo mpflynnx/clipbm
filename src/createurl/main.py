@@ -56,7 +56,10 @@ def main() -> None:
     try:
         print(Fore.LIGHTCYAN_EX + "\n    Reading url from clipboard...", flush=True)
         # Get url from clipboard
-        reg_url = paste_xsel()
+        dreg_url = paste_xsel()
+
+        # Remove trailing newlines from string dreg_url
+        reg_url = dreg_url.rstrip()
 
         # Validate reg_url
         if not validus.isurl(reg_url):
