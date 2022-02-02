@@ -1,3 +1,9 @@
+## v0.3.1 (2022-02-02)
+
+### Fix
+
+- **main.py**: add new regex module as dependency, to improve filename creation (#12)
+
 ## v0.3.0 (2022-02-01)
 
 ### Feat
