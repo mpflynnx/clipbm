@@ -4,6 +4,7 @@ from urllib.request import Request, urlopen
 import validus
 from bs4 import BeautifulSoup
 from colorama import Fore
+import regex
 
 
 def paste_xsel():
@@ -13,15 +14,13 @@ def paste_xsel():
 
 
 def remove_punctuation(s):
-    """Strip all punctuation, except "_", "/" , "-"from s."""
+    """ Strip all punctuation. """
 
-    punctuation = "!\"#$%&'()*+,/.:;<=>?@[\\]^`{|}~"
+    regularExpression = r'[\p{C} \p{M} \p{P} \p{S} \p{Z}]+'
 
-    s_sans_punct = ""
-    for letter in s:
-        if letter not in punctuation:
-            s_sans_punct += letter
-    return s_sans_punct
+    remove = regex.compile(regularExpression)
+
+    return remove.sub(" ", s).strip()
 
 
 def myreplace(old, new, s):
