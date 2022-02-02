@@ -7,7 +7,7 @@ createurl is a Python command line application, which will create a browser inde
 ## Demo
 
 
-![Example](./readme_resources/termtosvg_jv2_awui.svg)
+![Example](./readme_resources/termtosvg_0sc6bd1n.svg)
 
 
 
