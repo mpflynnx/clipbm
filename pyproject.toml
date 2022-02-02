@@ -13,7 +13,7 @@ classifiers = [
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
 ]
-requires = ["beautifulsoup4==4.9.3", "colorama==0.4.4", "lxml==4.6.1", "validus==0.3.0"]
+requires = ["beautifulsoup4==4.9.3", "colorama==0.4.4", "lxml==4.6.1", "validus==0.3.0", "regex==2020.10.28"]
 
 requires-python=">=3.7"
 description-file="README.md"
