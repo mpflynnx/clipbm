@@ -1,10 +1,11 @@
 import subprocess
 from urllib.request import Request, urlopen
 
+import regex
 import validus
 from bs4 import BeautifulSoup
 from colorama import Fore
-import regex
+from unidecode import unidecode
 
 
 def paste_xsel():
@@ -14,9 +15,9 @@ def paste_xsel():
 
 
 def remove_punctuation(s):
-    """ Strip all punctuation. """
+    """Strip all punctuation."""
 
-    regularExpression = r'[\p{C} \p{M} \p{P} \p{S} \p{Z}]+'
+    regularExpression = r"[\p{C} \p{M} \p{P} \p{S} \p{Z}]+"
 
     remove = regex.compile(regularExpression)
 
@@ -72,12 +73,8 @@ def main() -> None:
         # limit length of title
         title = dtitle[0:83]
 
-        # encode url title
-        encoded = title.encode("ascii", "ignore")
-        #  encoded = urlfile.encode("ascii", "replace")
-
-        # Decode now to utf-8.
-        urlfileutf8 = encoded.decode("utf-8")
+        # transliterate any Unicode text in title
+        urlfileutf8 = unidecode(title)
 
         # Strip any punctuation, excluding "_"
         clean = remove_punctuation(urlfileutf8)
