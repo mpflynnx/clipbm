@@ -1,3 +1,9 @@
+## v0.3.4 (2022-02-03)
+
+### Fix
+
+- **main.py**: switch to using Requests module (#17)
+
 ## v0.3.3 (2022-02-03)
 
 ### Fix
