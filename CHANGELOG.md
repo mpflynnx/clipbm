@@ -1,3 +1,9 @@
+## v0.3.3 (2022-02-03)
+
+### Fix
+
+- **main.py**: Unicode character handling (#16)
+
 ## v0.3.2 (2022-02-02)
 
 ### Fix
