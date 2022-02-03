@@ -1,7 +1,7 @@
 import subprocess
-from urllib.request import Request, urlopen
 
 import regex
+import requests
 import validus
 from bs4 import BeautifulSoup
 from colorama import Fore
@@ -46,9 +46,8 @@ def get_title(reg_url):
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/41.0.2228.0 Safari/537.3"
     }
-    req = Request(url=reg_url, headers=headers)
-    html = urlopen(req).read()
-    soup = BeautifulSoup(html, "lxml")
+    res = requests.get(url=reg_url, headers=headers)
+    soup = BeautifulSoup(res.content, "html.parser")
     return soup.title.text
 
 
