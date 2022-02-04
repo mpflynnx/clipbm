@@ -1,3 +1,9 @@
+## v0.4.0 (2022-02-04)
+
+### Feat
+
+- **main.py**: create path to save location (#22)
+
 ## v0.3.5 (2022-02-04)
 
 ### Refactor
