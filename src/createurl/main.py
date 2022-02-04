@@ -1,4 +1,6 @@
+import glob
 import subprocess
+import sys
 from pathlib import Path, PosixPath
 
 import regex
@@ -84,15 +86,22 @@ def main() -> None:
         utf8title = unidecode(spaces)
 
         # define the destination path
-        #  dest_path = Path.home() / "Dropbox" / "bookmarks"
-        dest_path = Path.home() / "Dropbox" / "testdir"
+        dest_path = Path.home() / "Dropbox" / "bookmarks"
         Path.mkdir(dest_path, parents=True, exist_ok=True)
 
         # define the filename suffix
         Path.suffix = ".url"
 
+        # Constuct filename.
+        filename = utf8title + Path.suffix
+
         # Constuct output location and filename.
-        urlfile2 = dest_path / (utf8title + Path.suffix)
+        urlfile2 = dest_path / filename
+
+        # check if file name exists
+        for file in glob.glob(f"{dest_path}/**/{filename}", recursive=True):
+            if file:
+                sys.exit(Fore.LIGHTRED_EX + f'\n    "{filename}" exists, exiting!\n')
 
         # Build the output file.
         build_file(reg_url, urlfile2)
