@@ -84,13 +84,15 @@ def main() -> None:
         utf8title = unidecode(spaces)
 
         # define the destination path
-        dest_path = PosixPath("~/Dropbox/bookmarks/")
+        #  dest_path = Path.home() / "Dropbox" / "bookmarks"
+        dest_path = Path.home() / "Dropbox" / "testdir"
+        Path.mkdir(dest_path, parents=True, exist_ok=True)
 
         # define the filename suffix
         Path.suffix = ".url"
 
         # Constuct output location and filename.
-        urlfile2 = dest_path.expanduser() / (utf8title + Path.suffix)
+        urlfile2 = dest_path / (utf8title + Path.suffix)
 
         # Build the output file.
         build_file(reg_url, urlfile2)
