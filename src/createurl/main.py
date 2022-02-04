@@ -1,4 +1,5 @@
 import subprocess
+from pathlib import Path, PosixPath
 
 import regex
 import requests
@@ -34,10 +35,9 @@ def myreplace(old, new, s):
 
 def build_file(url, urlfile):
     """ """
-    myfile = open(urlfile, "w")
-    myfile.write("[InternetShortcut]\n")
-    myfile.write('''URL="{0}"'''.format(url))
-    myfile.close()
+    with open(urlfile, mode="w", encoding="utf-8") as myfile:
+        myfile.write("[InternetShortcut]\n")
+        myfile.write(f'''URL="{url}"''')
 
 
 def get_title(reg_url):
@@ -55,6 +55,7 @@ def main() -> None:
 
     try:
         print(Fore.LIGHTCYAN_EX + "\n    Reading url from clipboard...", flush=True)
+
         # Get url from clipboard
         dreg_url = paste_xsel()
 
@@ -67,29 +68,36 @@ def main() -> None:
             return
 
         print(Fore.LIGHTCYAN_EX + "\n    Getting title for url...", flush=True)
+
         dtitle = get_title(reg_url)
 
         # limit length of title
         title = dtitle[0:83]
 
-        # transliterate any Unicode text in title
-        urlfileutf8 = unidecode(title)
-
         # Strip any punctuation, excluding "_"
-        clean = remove_punctuation(urlfileutf8)
+        clean = remove_punctuation(title)
 
         # Replace spaces with underscore.
         spaces = myreplace(" ", "_", clean)
 
+        # transliterate any Unicode text in title
+        utf8title = unidecode(spaces)
+
+        # define the destination path
+        dest_path = PosixPath("~/Dropbox/bookmarks/")
+
+        # define the filename suffix
+        Path.suffix = ".url"
+
         # Constuct output location and filename.
-        urlfile2 = "/home/live/Dropbox/bookmarks/" + spaces + ".url"
+        urlfile2 = dest_path.expanduser() / (utf8title + Path.suffix)
 
         # Build the output file.
         build_file(reg_url, urlfile2)
 
         # Text to display.
         print(Fore.LIGHTYELLOW_EX + "\n    New file created at....\n")
-        print(Fore.LIGHTGREEN_EX + "    " + urlfile2 + "\n")
+        print(Fore.LIGHTGREEN_EX + f"{urlfile2}\n")
 
     except Exception as x:
         print(Fore.LIGHTRED_EX + f"⚠️⚠️⚠️⚠️   Error: Unexpected crash: {x}.")
