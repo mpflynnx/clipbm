@@ -1,3 +1,9 @@
+## v0.3.5 (2022-02-04)
+
+### Refactor
+
+- **main.py**: update code to use newer Python3 features (#19)
+
 ## v0.3.4 (2022-02-03)
 
 ### Fix
