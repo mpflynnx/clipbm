@@ -1,3 +1,9 @@
+## v0.5.1 (2022-02-27)
+
+### Fix
+
+- **main.py**: add missing print statement (#25)
+
 ## v0.5.0 (2022-02-04)
 
 ### Feat
