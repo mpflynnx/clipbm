@@ -70,6 +70,7 @@ def main() -> None:
             return
 
         print(Fore.LIGHTCYAN_EX + "\n    Getting title for url...", flush=True)
+        print(Fore.LIGHTCYAN_EX + "     ..." + reg_url, flush=True)
 
         dtitle = get_title(reg_url)
 
