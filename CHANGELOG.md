@@ -1,3 +1,9 @@
+## v0.6.0 (2022-03-23)
+
+### Feat
+
+- **main.py**: extract URL and title from HTML link stored in clipboard (#28)
+
 ## v0.5.1 (2022-02-27)
 
 ### Fix
