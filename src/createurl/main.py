@@ -1,7 +1,7 @@
 import glob
 import subprocess
 import sys
-from pathlib import Path, PosixPath
+from pathlib import Path
 
 import regex
 import requests
@@ -53,26 +53,44 @@ def get_title(reg_url):
     return soup.title.text
 
 
+def validate_clipboard(clip):
+    """
+    Checks clipboard for a url string.
+    Checks clipboard for html containing url and title.
+    Returns url and title.
+    """
+
+    empty_title = ""
+    if validus.isurl(clip):
+        return clip, empty_title
+    else:
+        soup = BeautifulSoup(clip, "html.parser")
+        if soup.find(href=True) or soup.find("a") is not None:
+            url = soup.find(href=True)["href"]
+            raw_title = soup.find("a").contents[0]
+            return url, raw_title
+        sys.exit(
+            Fore.LIGHTRED_EX + "    ⚠️   ERROR: No url available in clipboard. 😢\n"
+        )
+
+
 def main() -> None:
 
     try:
         print(Fore.LIGHTCYAN_EX + "\n    Reading url from clipboard...", flush=True)
 
         # Get url from clipboard
-        dreg_url = paste_xsel()
+        dreg_url, dtitle = validate_clipboard(paste_xsel())
 
-        # Remove trailing newlines from string dreg_url
+        #  Remove any trailing newlines from string dreg_url
         reg_url = dreg_url.rstrip()
-
-        # Validate reg_url
-        if not validus.isurl(reg_url):
-            print(Fore.LIGHTRED_EX + "    ⚠️   ERROR: No url available in clipboard. 😢")
-            return
 
         print(Fore.LIGHTCYAN_EX + "\n    Getting title for url...", flush=True)
         print(Fore.LIGHTCYAN_EX + "     ..." + reg_url, flush=True)
 
-        dtitle = get_title(reg_url)
+        # if dtitle empty, use requests with url to get title
+        if dtitle == "":
+            dtitle = get_title(reg_url)
 
         # limit length of title
         title = dtitle[0:83]
@@ -112,7 +130,7 @@ def main() -> None:
         print(Fore.LIGHTGREEN_EX + f"{urlfile2}\n")
 
     except Exception as x:
-        print(Fore.LIGHTRED_EX + f"⚠️⚠️⚠️⚠️   Error: Unexpected crash: {x}.")
+        print(Fore.LIGHTRED_EX + f"⚠️⚠️⚠️⚠️   Error: Unexpected crash: {x}.\n")
 
 
 # --------------------------------------------------
